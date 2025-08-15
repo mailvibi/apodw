@@ -48,6 +48,10 @@ def update_file_with_text(oimgfn, i):
     font_size = 18
     text_line_len = 150
     text_x_loc  = 300
+    extrapolated_text_len = text_line_len * 8 + text_x_loc
+    if extrapolated_text_len > oimg.width:
+        text_line_len -= (extrapolated_text_len - oimg.width)/8
+    text_line_len = int(text_line_len)
     text_y_off_from_bottom = 150
     expl = [i["explanation"][j:j + text_line_len] for j in range(0,len(i["explanation"]), text_line_len)]
 
@@ -56,7 +60,7 @@ def update_file_with_text(oimgfn, i):
     pxlfrmbottom = text_y_off_from_bottom + len(expl) * (font_size + 2)
     diff = font_size + 5
     for e in expl:
-        draw.text((text_x_loc, txtloc_height - pxlfrmbottom), e, (255,255,255), font=font)
+        draw.text((text_x_loc, txtloc_height - pxlfrmbottom), e, (255,255,255), font=font, spacing=1)
         pxlfrmbottom -= diff
 
 #    draw.text((0,0),i["explanation"],(255,255,255),font=font)
