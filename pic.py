@@ -40,6 +40,24 @@ def get_modified_filename(oimgfn, prefix = None):
     lg.debug("new path = ", repr(nf))
     return nf
 
+def split_lines(text, line_len):
+#    expl = [text[j:j + line_len] for j in range(0,len(text), line_len)]
+    expl = [""]
+    words = text.split(" ")
+    linenum = 0
+    for word in words :
+        cln = len(expl[linenum])
+        if cln < line_len and (cln + len(word) + 1) < line_len:
+            expl[linenum] += " "
+            expl[linenum] += word
+        else:
+            linenum += 1
+            expl.append("")
+            expl[linenum] += " "
+            expl[linenum] += word
+    print(expl)
+    return expl
+
 def update_file_with_text(oimgfn, i):
     oimg = Image.open(oimgfn)
     draw = ImageDraw.Draw(oimg)
@@ -53,8 +71,8 @@ def update_file_with_text(oimgfn, i):
         text_line_len -= (extrapolated_text_len - oimg.width)/8
     text_line_len = int(text_line_len)
     text_y_off_from_bottom = 150
-    expl = [i["explanation"][j:j + text_line_len] for j in range(0,len(i["explanation"]), text_line_len)]
-
+#    expl = [i["explanation"][j:j + text_line_len] for j in range(0,len(i["explanation"]), text_line_len)]
+    expl = split_lines(i["explanation"], text_line_len)
     f = get_font()
     font = ImageFont.truetype(f, font_size)
     pxlfrmbottom = text_y_off_from_bottom + len(expl) * (font_size + 2)
